@@ -1,3 +1,5 @@
+.PHONY: docs
+
 test: clean
 	python runtests.py -v --strict
 
@@ -10,8 +12,8 @@ clean:
 	find . -type f -name "*.pyc" -delete
 	rm -rf seam.egg-info
 
-# docs-init:
-# 	pip install -r docs/requirements.txt
+docs-init:
+	pip install -r docs/requirements.txt
 
-# docs:
-# 	cd docs && make html
+docs:
+	cd docs && make html
