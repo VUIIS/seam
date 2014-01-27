@@ -30,7 +30,7 @@ subject_data = {'sub001': '/path/to/first/t1.nii',
                 'sub003': '/path/to/third/t1.nii'}
 
 for subject_id, path_to_t1 in subject_data.iteritems():
-    recon_command = recon_all(input=path_to_t1)
+    recon_command = recon_all(subject=subject_id, input=path_to_t1)
     script_name = 'recon_{}.sh'.format(subject_id)
     with open(script_name, 'w') as f:
         f.write(recon_command)
