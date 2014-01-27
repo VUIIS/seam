@@ -8,7 +8,7 @@ Seam
 
 Seam is a simple layer between neuroimaging tools and your data. It makes no decisions about how to organize your data or execute data analyses. It simply provides commands to intelligently call standard neuroimaging tools.
 
-It's designed to be extremely easy to use:
+It's designed to be extremely easy to use::
 
     from seam.freesurfer import recon_all
     recon_all_command = recon_all(subject='sub0001', input='/path/to/data.nii')
@@ -27,22 +27,26 @@ Seam will have no dependencies and minimal effort will be required to use it. It
 Installation
 ------------
 
-Install seam by running:
+Install the latest version with `pip <https://pypi.python.org/pypi/pip>`_::
 
     $ pip install seam
 
-It has no dependencies.
+Install the bleeding edge from the github repo::
+
+    $ pip install -e git+https://github.com/VUIIS/seam.git#egg=seam
+
+Either way, it has no dependencies.
 
 Contribute
 ----------
 
-- Issue Tracker: github.com/VUIIS/seam/issues
-- Source Code: github.com/VUIIS/seam
+- Issue Tracker: `<https://github.com/VUIIS/seam/issues>`_
+- Source Code: `<https://github.com/VUIIS/seam>`_
 
 Support
 -------
 
-If you are having issues, please raise an issue on Github.
+If you are having issues, please raise an issue on Github. I can't guarantee support but promise to help where I can.
 
 License
 -------

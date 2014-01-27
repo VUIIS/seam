@@ -38,9 +38,15 @@ for subject_id, path_to_t1 in subject_data.iteritems():
 
 The generated `recon_all` commands will be the exact three for each subject,  though obviously with different inputs.
 
+Documentation
+-------------
+
+The [official documentation][2].
+
 Support/Questions/Development
 -----------------------------
 
 Seam is very much a work-in-progress. It is supported through [the Vanderbilt Univeristy Institute for Imaging Science][1]. Please use github for questions and issues but I cannot guarantee support.
 
 [1]:    http://vuiis.vanderbilt.edu
+[2]:    http://seam.rtfd.org
