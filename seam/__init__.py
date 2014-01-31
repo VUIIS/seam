@@ -17,3 +17,5 @@ This is the main API.
 __author__ = 'Scott Burns <scott.s.burns@vanderbilt.edu>'
 __copyright__ = 'Copyright 2014 Vanderbilt University. All Rights Reserved'
 __version__ = '0.0'
+
+import freesurfer
