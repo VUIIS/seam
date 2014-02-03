@@ -1,14 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-""" __init__.py
+""" util.py
 
-Freesurfer interfaces
+Utility functions/constants across seam
 """
 __author__ = 'Scott Burns <scott.s.burns@vanderbilt.edu>'
 __copyright__ = 'Copyright 2014 Vanderbilt University. All Rights Reserved'
 
-# This exposes the "current" version
-from .v1 import recon_all, recon_input
-
-__all__ = ['recon_all', 'recon_input']
+import sys
+PY2 = sys.version_info[0] == 2
+if PY2:
+    STRING_TYPE = basestring
+else:
+    STRING_TYPE = str
