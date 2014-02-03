@@ -1,0 +1,9 @@
+Jinja2==2.7.2
+MarkupSafe==0.18
+Pygments==1.6
+Sphinx==1.2.1
+docutils==0.11
+py==1.4.19
+pytest==2.5.1
+virtualenv==1.11.2
+wheel==0.22.0
