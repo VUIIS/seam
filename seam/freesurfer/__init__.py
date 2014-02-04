@@ -28,11 +28,16 @@ Most of the FreeSurfer pipeline is automated, which makes it ideal
 for use on large data sets.
 
 (The above taken from the `overview page <http://surfer.nmr.mgh.harvard.edu/fswiki/FreeSurferAnalysisPipelineOverview>`_)
+
+Functions
++++++++++
 """
 __author__ = 'Scott Burns <scott.s.burns@vanderbilt.edu>'
 __copyright__ = 'Copyright 2014 Vanderbilt University. All Rights Reserved'
 
 # This exposes the "current" version
-from .v1 import recon_all, recon_input
+from .v1 import recon_all, recon_input, tkmedit_screenshot_tcl, \
+    tkmedit_screenshot_cmd
 
-__all__ = ['recon_input', 'recon_all']
+__all__ = ['recon_input', 'recon_all', 'tkmedit_screenshot_tcl',
+    'tkmedit_screenshot_cmd']
