@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-V1 adds the following:
+V1 defines the following:
 
 * ``recon-all -all`` exposed through :func:`seam.freesurfer.v1.recon_all`
 * ``recon-all -i`` exposed through :func:`seam.freesurfer.v1.recon_input`
@@ -10,6 +10,10 @@ V1 adds the following:
   to take screenshots of a volume loaded in ``tkmedit``.
 * :func:`seam.freesurfer.v1.tkmedit_screenshot_cmd` for supplying a
   command to execute ``tkmedit`` with a tcl script.
+* :func:`seam.freesurfer.v1.tksurfer_screenshot_tcl` for generating a
+  tcl script to take screenshots of a hemisphere using ``tksurfer``
+* :func:`seam.freesurfer.v1.tksurfer_screenshot_cmd` for supplying a
+  command to run ``tksurfer`` and generate screenshots.
 
 """
 __author__ = 'Scott Burns <scott.s.burns@vanderbilt.edu>'
@@ -94,6 +98,7 @@ def tkmedit_screenshot_tcl(basepath, beg=5, end=256, step=10):
     :param int step: Value to increment successive screenshots
 
     Usage::
+
       >>> from seam.freesurfer import tkmedit_screenshot_tcl
       >>> f = open('tmedit_screenshots.tcl', 'w')
       >>> f.write(tkmedit_screenshot_tcl('/path/to/image_dir'))
@@ -128,6 +133,71 @@ def tkmedit_screenshot_cmd(subject_id, volume, tcl_path, flags=None):
       'tkmedit sub0001 brain.finalsurfs.mgz -aseg -surfs -tcl /path/tkmedit.tcl'
     """
     template = "tkmedit {subject_id} {volume} {flag_string} -tcl {tcl_path}"
+    if flags:
+        flag_string = ' '.join(flags)
+    return template.format(**locals())
+
+
+def tksurfer_screenshot_tcl(basepath, annot='aparc.a2009s.annot'):
+    """
+    Supplies a tcl command to take screenshots of a surface using
+    `tksurfer <https://surfer.nmr.mgh.harvard.edu/fswiki/tksurfer>`_
+
+    Four screenshots are taken:
+
+    * lateral view (default view when ``tksurfer`` opens) saved to *basepath*-lateral.tiff
+    * medial view saved to *basepath*-medial.tiff
+    * Lateral view with an annotation loaded (given by *annot*)
+      saved to *basepath*-lateral-annot.tiff
+    * Medial view with an annotation loaded (given by *annot*)
+      saved to *basepath*-medial-annot.tiff
+
+    :param str basepath: prefix for images to be saved
+    :param str annot: annotation file to load for overlay on the surface
+
+    Usage::
+
+     >>> from seam.freesurfer import tksurfer_screenshot_tcl
+     >>> f = open('tksurfer.lh.tcl', 'w')
+     >>> f.write(tksurfer_screenshot_tcl('/path/to/screenshots/lh-'))
+     >>> f.close()
+    """
+    template = """make_lateral_view;
+redraw;
+save_tiff {basepath}-lateral.tiff;
+rotate_brain_y 180;
+redraw;
+save_tiff {basepath}-medial.tiff;
+labl_import_annotation {annot};
+redraw;
+make_lateral_view;
+redraw;
+save_tiff {basepath}-annot-lateral.tiff;
+rotate_brain_y 180;
+redraw;
+save_tiff {basepath}-annot-medial.tiff;
+exit;"""
+    return template.format(**locals())
+
+
+def tksurfer_screenshot_cmd(subject_id, hemi, surface, tcl_path, flags=None):
+    """
+    Supply a command that will run ``tksurfer`` using the *surface* from
+    *subject_id*'s *hemi* hemisphere and execute a tcl script.
+
+    :param str subject_id: subject identifier
+    :param str hemi: 'lh' or 'rh', hemisphere to open in tksurfer
+    :param str surface: surface to view
+    :param str tcl_path: path to tcl script to execute
+    :param list flags: flags to pass into ``tksurfer``
+
+    Usage::
+
+      >>> from seam.freesurfer import tksurfer_screenshot_cmd
+      >>> tksurfer_screenshot_cmd('sub0001', 'lh', 'inflated', '/path/tksurfer.lh.tcl', ['-gray'])
+      'tksurfer sub0001 lh inflated -gray -tcl /path/tksurfer.lh.tcl'
+    """
+    template = "tksurfer {subject_id} {hemi} {surface} {flag_string} -tcl {tcl_path}"
     if flags:
         flag_string = ' '.join(flags)
     return template.format(**locals())

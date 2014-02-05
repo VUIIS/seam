@@ -9,7 +9,7 @@ __author__ = 'Scott Burns <scott.s.burns@vanderbilt.edu>'
 __copyright__ = 'Copyright 2014 Vanderbilt University. All Rights Reserved'
 
 from seam.freesurfer import recon_all, recon_input, tkmedit_screenshot_tcl,\
-    tkmedit_screenshot_cmd
+    tkmedit_screenshot_cmd, tksurfer_screenshot_tcl, tksurfer_screenshot_cmd
 from seam.freesurfer import v1
 
 # Version specific
@@ -25,13 +25,30 @@ SaveTIFF /path/to/screenshots/tkmedit-$i.tiff
 exit
 """
 v1_tkmedit_screenshot_cmd = "tkmedit foo brain.mgz -aseg -surfs -tcl /path/tkmedit.tcl"
+v1_tksurfer_screenshot_tcl = """make_lateral_view;
+redraw;
+save_tiff /path/to/screenshots/lh-lateral.tiff;
+rotate_brain_y 180;
+redraw;
+save_tiff /path/to/screenshots/lh-medial.tiff;
+labl_import_annotation aparc.a2009s.annot;
+redraw;
+make_lateral_view;
+redraw;
+save_tiff /path/to/screenshots/lh-annot-lateral.tiff;
+rotate_brain_y 180;
+redraw;
+save_tiff /path/to/screenshots/lh-annot-medial.tiff;
+exit;"""
+v1_tksurfer_screenshot_cmd = "tksurfer foo lh inflated -gray -tcl /path/tksurfer.lh.tcl"
 
 # Current
 current_recon_all = v1_recon_all
 current_recon_input = v1_recon_input
 current_tkmedit_screenshot_tcl = v1_tkmedit_screenshot_tcl
 current_tkmedit_screenshot_cmd = v1_tkmedit_screenshot_cmd
-
+current_tksurfer_screenshot_tcl = v1_tksurfer_screenshot_tcl
+current_tksurfer_screenshot_cmd = v1_tksurfer_screenshot_cmd
 
 # Current tests
 def test_current_recon_all():
@@ -43,9 +60,16 @@ def test_current_recon_input():
 def test_current_tkmedit_screenshot_tcl():
     assert current_tkmedit_screenshot_tcl == tkmedit_screenshot_tcl('/path/to/screenshots/')
 
-def test_current_tkmedit_Screenshot_cmd():
+def test_current_tkmedit_screenshot_cmd():
     cmd = tkmedit_screenshot_cmd('foo', 'brain.mgz', '/path/tkmedit.tcl', ['-aseg', '-surfs'])
     assert current_tkmedit_screenshot_cmd == cmd
+
+def test_current_tksurfer_screenshot_tcl():
+    assert current_tksurfer_screenshot_tcl == tksurfer_screenshot_tcl('/path/to/screenshots/lh')
+
+def test_current_tksurfer_screenshot_cmd():
+    cmd = tksurfer_screenshot_cmd('foo', 'lh', 'inflated', '/path/tksurfer.lh.tcl', ['-gray'])
+    assert current_tksurfer_screenshot_cmd == cmd
 
 
 # V1 tests
@@ -66,3 +90,10 @@ def test_v1_tkmedit_screenshot_tcl():
 def test_v1_tkmedit_screenshot_cmd():
     cmd = v1.tkmedit_screenshot_cmd('foo', 'brain.mgz', '/path/tkmedit.tcl', ['-aseg', '-surfs'])
     assert v1_tkmedit_screenshot_cmd == cmd
+
+def test_v1_tksurfer_screenshot_tcl():
+    assert v1_tksurfer_screenshot_tcl == v1.tksurfer_screenshot_tcl('/path/to/screenshots/lh')
+
+def test_v1_tksurfer_screenshot_cmd():
+    cmd = v1.tksurfer_screenshot_cmd('foo', 'lh', 'inflated', '/path/tksurfer.lh.tcl', ['-gray'])
+    assert v1_tksurfer_screenshot_cmd == cmd
