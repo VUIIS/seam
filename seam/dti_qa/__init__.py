@@ -19,6 +19,6 @@ __author__ = 'Scott Burns <scott.s.burns@vanderbilt.edu>'
 __copyright__ = 'Copyright 2014 Vanderbilt University. All Rights Reserved'
 
 
-from v1 import dtiqa_mcode
+from .v1 import dtiqa_mcode
 
 __all__ = ['dtiqa_mcode']
