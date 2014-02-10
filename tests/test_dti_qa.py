@@ -54,6 +54,9 @@ current_single_mcode = v1_single_mcode
 current_multi_mcode = v1_multi_mcode
 
 def single_args_factory():
+    return '/path/to/dti.nii', '/path/to/basedir', '/path/to/dti_qa', 6
+
+def single_args_factory_list():
     return ['/path/to/dti.nii'], '/path/to/basedir', '/path/to/dti_qa', 6
 
 def multi_args_factory():
@@ -65,6 +68,10 @@ def test_current_dtiqa_single():
     args = single_args_factory()
     assert current_single_mcode == dtiqa_mcode(*args)
 
+def test_current_dtiqa_single_list():
+    args = single_args_factory_list()
+    assert current_single_mcode == dtiqa_mcode(*args)
+
 def test_current_dtiqa_multi():
     args = multi_args_factory()
     assert current_multi_mcode == dtiqa_mcode(*args)
@@ -72,6 +79,10 @@ def test_current_dtiqa_multi():
 # Testing v1
 def test_v1_dtiqa_single():
     args = single_args_factory()
+    assert v1_single_mcode == v1.dtiqa_mcode(*args)
+
+def test_v1_dtiqa_single_list():
+    args = single_args_factory_list()
     assert v1_single_mcode == v1.dtiqa_mcode(*args)
 
 def test_v1_dtiqa_multi():

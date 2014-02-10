@@ -11,11 +11,13 @@ __copyright__ = 'Copyright 2013 Vanderbilt University. All Rights Reserved'
 
 import os
 
+from ...util import STRING_TYPE
+
 def dtiqa_mcode(images, basedir, dtiqa_path, n_b0=1):
     """
     Returns m-code that can be executed in matlab to run DTI_QA
 
-    :param list images: raw DTI images
+    :param str,list images: path to single raw DTI image or list of multiple
     :param str basedir: base directory to write results
     :param str dtiqa_path: path to DTI_QA installation
     :param int n_b0: # of b0 averages (default is 1)
@@ -29,10 +31,10 @@ def dtiqa_mcode(images, basedir, dtiqa_path, n_b0=1):
       >>> f.write(dtiqa_mcode(images, basedir, dtiqa_path, n_b0))
       >>> f.close()
     """
-    single_template = """addpath(genpath('{dtiqa_path}'))
+    template = """addpath(genpath('{dtiqa_path}'))
 ec = 0;
 try
-    DTI_QA_Pipeline('/path/to/dti.nii', '/path/to/basedir', '/path/to/dti_qa', 6);
+    {pipeline_command}
     load {regmat}
     load {outmat}
     csvwrite('{rotcsv}', rotation);
@@ -49,31 +51,20 @@ end
 disp(['Exiting with status ' num2str(ec)]);
 exit(ec);
 """
-    multi_template = """addpath(genpath('{dtiqa_path}'))
-ec = 0;
-try
-    DTI_QA_Pipeline_Multi('{dtiqa_path}', '{basedir}', {n_b0}, [], {image_string});
-    load {regmat}
-    load {outmat}
-    csvwrite('{rotcsv}', rotation);
-    csvwrite('{transcsv}', translation);
-    csvwrite('{outcsv}', outs);
-    boxplotsmat_to_csv('{biasmat}', '{biascsv}');
-    boxplotsmat_to_csv('{famat}', '{facsv}');
-    boxplotsmat_to_csv('{fasigmamat}', '{fasigmacsv}');
-    boxplotsmat_to_csv('{mdmat}', '{mdcsv}');
-catch exception
-    disp(exception.message)
-    ec = 1;
-end
-disp(['Exiting with status ' num2str(ec)]);
-exit(ec);
-"""
-    if len(images) > 1:
-        image_string = ', '.join("'{}'".format(im) for im in images)
-        template = multi_template
+    if isinstance(images, STRING_TYPE):
+        # single image passed as string
+        pipeline_template = "DTI_QA_Pipeline('{images}', '{basedir}', '{dtiqa_path}', {n_b0});"
+        pipeline_command = pipeline_template.format(**locals())
+    elif len(images) == 1:
+        # one image in the list, still need to run regular
+        pipeline_template = "DTI_QA_Pipeline('{image_string}', '{basedir}', '{dtiqa_path}', {n_b0});"
+        image_string = images[0]
+        pipeline_command = pipeline_template.format(**locals())
     else:
-        template = single_template
+        # Multiple images, run DTI_QA_Pipeline_Multi
+        pipeline_template = "DTI_QA_Pipeline_Multi('{dtiqa_path}', '{basedir}', {n_b0}, [], {image_string});"
+        image_string = ', '.join("'{}'".format(im) for im in images)
+        pipeline_command = pipeline_template.format(**locals())
     regmat = os.path.join(basedir, 'extra', 'Registration_motion.mat')
     outmat = os.path.join(basedir, 'extra', 'Outliers.mat')
     rotcsv = os.path.join(basedir, 'extra', 'Rotation.csv')
