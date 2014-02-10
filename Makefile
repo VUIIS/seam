@@ -1,7 +1,8 @@
 .PHONY: docs
 
 test: clean
-	python runtests.py -v --strict
+	python2.7 runtests.py -v --strict
+	python3.3 runtests.py -v --strict
 
 publish:
 	python setup.py register

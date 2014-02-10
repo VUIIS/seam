@@ -2,4 +2,9 @@
 Tools
 #####
 
-To be added as modules are written.
+.. automodule:: seam.freesurfer
+   :members:
+
+**Versioning**:
+
+* .. automodule:: seam.freesurfer.v1
