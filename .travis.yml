@@ -6,4 +6,5 @@ install:
   # Install seam to test
   - "pip install -e ."
 script:
-  - "make test"
+  - "python runtests.py -v --strict"
+  - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then pip install -r dev-requirements.txt && make docs; fi
