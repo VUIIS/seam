@@ -8,3 +8,5 @@ install:
 script:
   - "python runtests.py -v --strict"
   - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then pip install -r dev-requirements.txt && make docs; fi
+notifications:
+  slack: vuiis-cci:DkfxattUM8s0nLJlg3uUaVso
