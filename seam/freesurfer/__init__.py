@@ -37,8 +37,9 @@ __copyright__ = 'Copyright 2014 Vanderbilt University. All Rights Reserved'
 
 # This exposes the "current" version
 from .v1 import recon_all, recon_input, tkmedit_screenshot_tcl, \
-    tkmedit_screenshot_cmd, tksurfer_screenshot_tcl, tksurfer_screenshot_cmd
+    tkmedit_screenshot_cmd, tksurfer_screenshot_tcl, tksurfer_screenshot_cmd, \
+    annot2label_cmd, recipe
 
 __all__ = ['recon_input', 'recon_all', 'tkmedit_screenshot_tcl',
     'tkmedit_screenshot_cmd', 'tksurfer_screenshot_tcl',
-    'tksurfer_screenshot_cmd']
+    'tksurfer_screenshot_cmd', 'annot2label_cmd', 'recipe']
