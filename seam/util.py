@@ -30,7 +30,7 @@ def wrap_with_xvfb(command, wait=5, server_args='-screen 0, 1600x1200x24'):
     parts = ['xvfb-run',
         '-a', # automatically get a free server number
         '-f {}'.format(get_tmp_filename()),
-        '-e {}'.format(get_tmp_filename()),
+        '-e {}'.format(get_tmp_filename(ext='err')),
         '--wait={:d}'.format(wait),
         '--server-args="{}"'.format(server_args),
         command]
