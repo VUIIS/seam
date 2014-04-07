@@ -3,7 +3,7 @@
 
 """ core.py
 
-V1 core
+Core functions
 """
 
 __author__ = 'Scott Burns <scott.s.burns@vanderbilt.edu>'
