@@ -15,6 +15,17 @@ Importantly, seam is oblivious to these two otherwise-important factors:
 
 Seam has no dependencies and requires minimal effort to use it. Seam can easily integrate into any application ranging from a single script to something much more complicated.
 
+Recipes vs Functions
+####################
+
+Where possible, functionality provided by seam is organized in two layers:
+
+* Functions: low-level, highly configurable functions to produce commands or scripts.
+* Recipes: high-level, less configurable functions to produce complete workflows around a tool.
+
+Recipes will be exposed as both binaries that can be executed in a shell and as importable functions in python code. Users should first try to use recipes to accomplish their goals as these expose best practices around the tool.
+
+If more customization is needed, the low-level functions are also available. Understandably, more effort is required to piece together the low-level functions into a meaningful processing stream.
 
 Backwards Compatiblity
 ######################

@@ -17,4 +17,4 @@ docs-init:
 	pip install -r docs/requirements.txt
 
 docs:
-	cd docs && make html
+	cd docs && make clean && make html
