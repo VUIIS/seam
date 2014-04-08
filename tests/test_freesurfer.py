@@ -9,7 +9,8 @@ __author__ = 'Scott Burns <scott.s.burns@vanderbilt.edu>'
 __copyright__ = 'Copyright 2014 Vanderbilt University. All Rights Reserved'
 
 from seam.freesurfer import recon_all, recon_input, tkmedit_screenshot_tcl,\
-    tkmedit_screenshot_cmd, tksurfer_screenshot_tcl, tksurfer_screenshot_cmd
+    tkmedit_screenshot_cmd, tksurfer_screenshot_tcl, tksurfer_screenshot_cmd,\
+    annot2label_cmd
 from seam.freesurfer import v1
 
 # Version specific
@@ -41,6 +42,8 @@ redraw;
 save_tiff /path/to/screenshots/lh-annot-medial.tiff;
 exit;"""
 v1_tksurfer_screenshot_cmd = "tksurfer foo lh inflated -gray -tcl /path/tksurfer.lh.tcl"
+v1_tksurfer_screenshot_cmd_no_flags = "tksurfer foo lh inflated -tcl /path/tksurfer.lh.tcl"
+v1_annot2label_cmd = 'mri_annotation2label --subject foo --hemi lh --annotation bar.annot --outdir /path/to/bat/ --surface white'
 
 # Current
 current_recon_all = v1_recon_all
@@ -49,6 +52,7 @@ current_tkmedit_screenshot_tcl = v1_tkmedit_screenshot_tcl
 current_tkmedit_screenshot_cmd = v1_tkmedit_screenshot_cmd
 current_tksurfer_screenshot_tcl = v1_tksurfer_screenshot_tcl
 current_tksurfer_screenshot_cmd = v1_tksurfer_screenshot_cmd
+current_annot2label_cmd = v1_annot2label_cmd
 
 # Current tests
 def test_current_recon_all():
@@ -97,3 +101,47 @@ def test_v1_tksurfer_screenshot_tcl():
 def test_v1_tksurfer_screenshot_cmd():
     cmd = v1.tksurfer_screenshot_cmd('foo', 'lh', 'inflated', '/path/tksurfer.lh.tcl', ['-gray'])
     assert v1_tksurfer_screenshot_cmd == cmd
+    cmd_no_flags = v1.tksurfer_screenshot_cmd('foo', 'lh', 'inflated', '/path/tksurfer.lh.tcl')
+    assert v1_tksurfer_screenshot_cmd_no_flags == cmd_no_flags
+
+def test_v1_annot2label_cmd():
+    cmd = v1.annot2label_cmd('foo', hemi='lh', annot_path='bar.annot', outdir='/path/to/bat/')
+    assert cmd == v1_annot2label_cmd
+
+# Recipe Testing
+def test_script_filename():
+    assert v1.recipe.recon_script_name('foo') == 'foo.recon.sh'
+
+def test_tkmedit_tcl_fname():
+    assert v1.recipe.tkmedit_tcl_name('foo') == 'foo.tkmedit.tcl'
+
+def test_tksurfer_tcl_fname():
+    assert v1.recipe.tksurfer_tcl_name('foo', 'lh') == 'foo.tksurfer.lh.tcl'
+
+def test_screenshot_dirname():
+    assert v1.recipe.screenshots_dir('foo') == 'foo_screenshots'
+
+def test_tksurfer_screenshot_basepath():
+    sd, sid, hemi = '/tmp', 'foo', 'lh'
+    known_basepath = '/tmp/foo_screenshots/lh'
+    assert v1.recipe.tksurfer_screenshot_basepath(sd, sid, hemi) == known_basepath
+
+def test_annot_path():
+    known_file = '/path/to/subjects/foo/label/lh.aparc.a2009s.annot'
+    assert v1.recipe.a2009s_file('foo', '/path/to/subjects', 'lh') == known_file
+
+def test_label_dir():
+    known = '/path/to/subjects/foo/label'
+    assert v1.recipe.label_directory('foo', '/path/to/subjects') == known
+
+def test_parser():
+    ap = v1.recipe.get_parser()
+    cmd_line = 'foo /path/to/scripts -i /path/to/image.nii --use-xvfb -mprage -log /tmp/log.log'
+    args, recon_flags = ap.parse_known_args(cmd_line.split())
+    assert args.subject_id == 'foo'
+    assert args.script_dir == '/path/to/scripts'
+    assert args.inputs == ['/path/to/image.nii']
+    assert args.use_xvfb == True
+    assert ['-mprage', '-log', '/tmp/log.log'] == recon_flags
+
+

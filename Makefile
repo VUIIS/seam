@@ -12,9 +12,17 @@ publish:
 clean:
 	find . -type f -name "*.pyc" -delete
 	rm -rf seam.egg-info
+	rm -rf htmlcov
 
 docs-init:
 	pip install -r docs/requirements.txt
 
 docs:
-	cd docs && make html
+	cd docs && make clean && make html
+
+cov:
+	coverage run --source=seam runtests.py
+	coverage report
+
+install:
+	python setup.py develop

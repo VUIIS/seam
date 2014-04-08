@@ -3,10 +3,13 @@ seam
 
 Seam is a simple layer between standard neuroimaging tools and your data. It generates useful commands around these tools so you can apply them against your data.
 
-Seam makes no decisions about the organization of your data or how the generated commands will ultimately be executed. That is up to you as the scientist & engineer.
+Documentation
+-------------
+
+The [official documentation][2].
 
 Initial planned support
----------------
+-----------------------
 
 - Freesurfer's `recon-all` and `trac-all` commands with helper functions for taking `tksurfer` & `tkmedit` screenshots, etc.
 - FSL's `dtifit`, `bedpost` & `probtrackx2`.
@@ -18,6 +21,8 @@ Philosophy
 Software is best written in layers. Each layer should encapsulate knowledge about how to best use the next lower layer. Its functionality should be exposed through as simple an API as possible.
 
 Seam will have no dependencies and minimal effort will be required to use it. It should integrate into any application ranging from a single script to something much more complicated.
+
+Seam makes no decisions about the organization of your data or how the generated commands will ultimately be executed. That is up to you as the scientist & engineer.
 
 A simple example
 ----------------
@@ -38,10 +43,6 @@ for subject_id, path_to_t1 in subject_data.iteritems():
 
 The generated `recon_all` commands will be the exact three for each subject,  though obviously with different inputs.
 
-Documentation
--------------
-
-The [official documentation][2].
 
 Support/Questions/Development
 -----------------------------
