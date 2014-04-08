@@ -115,8 +115,16 @@ def test_script_filename():
 def test_tkmedit_tcl_fname():
     assert v1.recipe.tkmedit_tcl_name('foo') == 'foo.tkmedit.tcl'
 
+def test_tksurfer_tcl_fname():
+    assert v1.recipe.tksurfer_tcl_name('foo', 'lh') == 'foo.tksurfer.lh.tcl'
+
 def test_screenshot_dirname():
     assert v1.recipe.screenshots_dir('foo') == 'foo_screenshots'
+
+def test_tksurfer_screenshot_basepath():
+    sd, sid, hemi = '/tmp', 'foo', 'lh'
+    known_basepath = '/tmp/foo_screenshots/lh'
+    assert v1.recipe.tksurfer_screenshot_basepath(sd, sid, hemi) == known_basepath
 
 def test_annot_path():
     known_file = '/path/to/subjects/foo/label/lh.aparc.a2009s.annot'
@@ -128,10 +136,12 @@ def test_label_dir():
 
 def test_parser():
     ap = v1.recipe.get_parser()
-    cmd_line = 'foo /path/to/scripts -i /path/to/image.nii --use-xvfb --recon-flag \'-mprage\''
-    args = ap.parse_args(cmd_line.split())
+    cmd_line = 'foo /path/to/scripts -i /path/to/image.nii --use-xvfb -mprage -log /tmp/log.log'
+    args, recon_flags = ap.parse_known_args(cmd_line.split())
     assert args.subject_id == 'foo'
     assert args.script_dir == '/path/to/scripts'
     assert args.inputs == ['/path/to/image.nii']
     assert args.use_xvfb == True
-    assert args.recon_flags == '\'-mprage\''
+    assert ['-mprage', '-log', '/tmp/log.log'] == recon_flags
+
+
