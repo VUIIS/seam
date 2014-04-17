@@ -18,6 +18,7 @@ __author__ = 'Scott Burns <scott.s.burns@vanderbilt.edu>'
 __copyright__ = 'Copyright 2014 Vanderbilt University. All Rights Reserved'
 __version__ = '0.0'
 
-from . import freesurfer
+import seam.freesurfer as freesurfer
+import seam.fsl as fsl
 
-__all__ = ['freesurfer', ]
+__all__ = ['freesurfer', 'fsl']
