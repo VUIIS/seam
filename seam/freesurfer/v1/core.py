@@ -15,6 +15,7 @@ from ...util import STRING_TYPE
 
 base_parts = ['recon-all', '-s {subject_id}']
 
+
 def recon_all(subject_id, flags=None):
     """
     This function supplies the ``recon-all -all`` command. This command
@@ -207,3 +208,39 @@ def annot2label_cmd(subject_id, hemi, annot_path, outdir, surface='white'):
     """
     template = "mri_annotation2label --subject {subject_id} --hemi {hemi} --annotation {annot_path} --outdir {outdir} --surface {surface}"
     return template.format(**locals())
+
+
+def mri_binarize(input, output, min=None, max=None, match=None, wm=False,
+        wmvcsf=False, flags=None):
+    """Build Freesurfer's ``mri_binarize`` command
+
+    :param str input: input volume
+    :param str output: output volume
+    :param int,str min: minimum threshold
+    :param int,str max: maximum threshold
+    :param int,str,list match: match values instead of threshold
+    :param bool wm: produce white matter mask
+    :param bool wmvcsf: output white matter & ventricular csf mask
+    :param list flags: other flags to pass to ``mri_binarize``
+
+    :note: mutually inclusive args are (min, max), (match), (wm), and (wmvcsf).
+      Combinations of those groups don't make sense but seam will not prevent
+      you from shooting yourself in the foot.
+    """
+    parts = ['mri_binarize', '--i {input}', '--o {output}']
+    if min: parts.append('--min {min}')
+    if max: parts.append('--max {max}')
+    if match:
+        if isinstance(match, STRING_TYPE):
+            parts.append('--match {match}')
+        else:
+            try:
+                if len(match) > 0:
+                    matches = ' '.join(map(str, match))
+                    parts.append('--match {}'.format(matches))
+            except TypeError:  # len(number)
+                parts.append('--match {match:d}')
+    if wm: parts.append('--wm')
+    if wmvcsf: parts.append('--wm+vcsf')
+    if flags: parts.extend(flags)
+    return ' '.join(parts).format(**locals())

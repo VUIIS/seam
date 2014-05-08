@@ -19,13 +19,14 @@ V1 defines the following functions:
   tcl script to take screenshots of a hemisphere using ``tksurfer``
 * :func:`seam.freesurfer.v1.tksurfer_screenshot_cmd` for supplying a
   command to run ``tksurfer`` and generate screenshots.
-* :func:`seam.freesufer.v1.annot2label_cmd` for building a
+* :func:`seam.freesurfer.v1.annot2label_cmd` for building a
   ``mri_annotation2label`` command.
+* :func:`seam.freesurfer.v1.mri_binarize` for building ``mri_binarize`` commands.
 """
 __author__ = 'Scott Burns <scott.s.burns@vanderbilt.edu>'
-__copyright__ = 'Copyright 2013 Vanderbilt University. All Rights Reserved'
+__copyright__ = 'Copyright 2014 Vanderbilt University. All Rights Reserved'
 
 from .core import recon_all, recon_input, tkmedit_screenshot_tcl, \
     tkmedit_screenshot_cmd, tksurfer_screenshot_tcl, tksurfer_screenshot_cmd, \
-    annot2label_cmd
+    annot2label_cmd, mri_binarize
 from .recipe import build_recipe

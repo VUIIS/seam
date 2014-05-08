@@ -108,6 +108,18 @@ def test_v1_annot2label_cmd():
     cmd = v1.annot2label_cmd('foo', hemi='lh', annot_path='bar.annot', outdir='/path/to/bat/')
     assert cmd == v1_annot2label_cmd
 
+def test_v1_mri_binarize():
+    i, o = 'in.mgz', 'out.nii.gz'
+    assert v1.mri_binarize(i, o, wm=True) == 'mri_binarize --i in.mgz --o out.nii.gz --wm'
+    assert v1.mri_binarize(i, o, min=2, max=4) == 'mri_binarize --i in.mgz --o out.nii.gz --min 2 --max 4'
+    assert v1.mri_binarize(i, o, match=2) == 'mri_binarize --i in.mgz --o out.nii.gz --match 2'
+    assert v1.mri_binarize(i, o, match=[2, 4, 5]) == 'mri_binarize --i in.mgz --o out.nii.gz --match 2 4 5'
+    assert v1.mri_binarize(i, o, match=['2', '4', '5']) == 'mri_binarize --i in.mgz --o out.nii.gz --match 2 4 5'
+    assert v1.mri_binarize(i, o, match='2') == 'mri_binarize --i in.mgz --o out.nii.gz --match 2'
+    assert v1.mri_binarize(i, o, match='2 4 5') == 'mri_binarize --i in.mgz --o out.nii.gz --match 2 4 5'
+    assert v1.mri_binarize(i, o, wmvcsf=True) == 'mri_binarize --i in.mgz --o out.nii.gz --wm+vcsf'
+
+
 # Recipe Testing
 def test_script_filename():
     assert v1.recipe.recon_script_name('foo') == 'foo.recon.sh'
@@ -143,5 +155,3 @@ def test_parser():
     assert args.inputs == ['/path/to/image.nii']
     assert args.use_xvfb == True
     assert ['-mprage', '-log', '/tmp/log.log'] == recon_flags
-
-
